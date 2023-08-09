@@ -14,13 +14,28 @@ def random_predict(number: int = 1) -> int:
     Returns:
         int: Число попыток
     """
-    count = 0
+    #Указываем границы, с помощью которых будет сужать область поиска
+    border_min = 1
+    border_max = 101
+    
+    count = 0 #количество попыток
+    
+    predict = np.random.randint(1,101) #компьютер закадывает число
 
-    while True:
-        count += 1
-        predict_number = np.random.randint(1, 101)  # предполагаемое число
-        if number == predict_number:
-            break  # выход из цикла если угадали
+    while number != predict:
+
+      count += 1
+
+      if predict > number:
+        border_max = predict #Меняем занчение верхней границы на загаданное число
+        predict = round((border_min + border_max)/2) 
+      else:
+        border_min = predict #Меняем занчение нижней границы на загаданное число
+        predict = round((border_min + border_max)/2)
+
+      if (border_max - border_min) <2:
+        break
+
     return count
 
 
@@ -34,7 +49,7 @@ def score_game(random_predict) -> int:
         int: среднее количество попыток
     """
     count_ls = []
-    #np.random.seed(1)  # фиксируем сид для воспроизводимости
+    np.random.seed(1)  # фиксируем сид для воспроизводимости
     random_array = np.random.randint(1, 101, size=(1000))  # загадали список чисел
 
     for number in random_array:
